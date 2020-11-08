@@ -1,39 +1,41 @@
 package com.userregistration.app.demo.model;
 
 import java.time.LocalDateTime;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "user_accounts")
 public class UserAccount {
     @Id
+    @Column(name = "user_account_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String firstName;
     private String lastName;
-    private String role;
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_account_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
     private LocalDateTime createdAt;
     private String password;
     private boolean enabled;
 
-    //how to get current date-time and map to db
-    //add checkstyle plugin
-
     public UserAccount() {
     }
 
-    public UserAccount(String username, String firstName,
-                       String lastName, String role, LocalDateTime createdAt,
-                       String password, boolean enabled) {
+    public UserAccount(Long id, String username, String firstName, String lastName,
+                       Set<Role> roles, LocalDateTime createdAt, String password, boolean enabled) {
+        this.id = id;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = role;
+        this.roles = roles;
         this.createdAt = createdAt;
         this.password = password;
         this.enabled = enabled;
@@ -79,14 +81,6 @@ public class UserAccount {
         this.lastName = lastName;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -101,5 +95,13 @@ public class UserAccount {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

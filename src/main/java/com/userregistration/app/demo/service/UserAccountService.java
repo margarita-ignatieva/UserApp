@@ -5,15 +5,15 @@ import com.userregistration.app.demo.model.UserAccount;
 import java.util.List;
 
 public interface UserAccountService {
-    UserAccount add(UserAccountDto userAccountDto);
+    UserAccount add(UserAccount userAccount);
 
-    UserAccountDto findByUsername(String username);
+    UserAccount findByUsername(String username);
 
     List<UserAccount> getUserAccounts();
 
     void deleteUserAccount(Long id);
 
-    void updateUserAccount(UserAccountDto userAccountDto, Long id);
+    void updateUserAccount(UserAccount userAccount, Long id);
 
-    UserAccountDto findById(Long id);
+    UserAccount findById(Long id);
 }

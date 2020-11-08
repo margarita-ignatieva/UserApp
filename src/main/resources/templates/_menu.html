@@ -1,9 +1,9 @@
 <div xmlns:th="http://www.thymeleaf.org"
-     style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;">
+     style="border: 1px solid #ccc;padding:5px;margin-bottom:15px;">
 
     <a th:href="@{/}">Home</a>
 
-    | &nbsp;
+    | &nbsp;&nbsp;
 
     <a th:href="@{/user}">Members</a>
 
@@ -13,8 +13,10 @@
 
     | &nbsp;&nbsp;
 
+    <td >
     <form th:action="@{/logout}" method="post" >
         <input type="submit" value="Logout"/>
     </form>
+    </td>
 
 </div>

@@ -26,7 +26,7 @@ public class UserAccountDto {
             message = "Only Latin letters and numbers, at least 1 number and 1 letter")
     private String password;
     @NotNull
-    private String role;
+    private Long roleId;
     private String status;
     private LocalDateTime createdAt;
 
@@ -34,13 +34,13 @@ public class UserAccountDto {
     }
 
     public UserAccountDto(Long id, String username, String firstName, String lastName,
-                          String password, String role, String status, LocalDateTime createdAt) {
+                          String password, Long roleId, String status, LocalDateTime createdAt) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.role = role;
+        this.roleId = roleId;
         this.status = status;
         this.createdAt = createdAt;
     }
@@ -77,12 +77,12 @@ public class UserAccountDto {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     public String getStatus() {

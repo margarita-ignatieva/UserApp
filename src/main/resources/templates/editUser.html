@@ -8,7 +8,7 @@
 <div>
 <h2>Edit User account</h2>
 
-<form th:action="@{'/user/' + ${user.id} + '/edit'}" th:object="${user}" method="POST">
+<form th:action="@{'/user/' + ${userAccountEdit.id} + '/edit'}" th:object="${userAccountEdit}" method="POST">
     <table>
 
         <tr>
@@ -41,13 +41,13 @@
         <tr>
             <td>Role</td>
             <td>
-                <select th:field="*{role}">
-                    <option value="ADMIN">ADMIN</option>
-                    <option value="USER">USER</option>
+                <select th:field="*{roleId}">
+                    <option value="1">ADMIN</option>
+                    <option value="2">USER</option>
                 </select>
             </td>
             <td>
-                <span th:if="${#fields.hasErrors('role')}" th:errors="*{role}">..</span>
+                <span th:if="${#fields.hasErrors('roleId')}" th:errors="*{roleId}">..</span>
             </td>
         </tr>
         <tr>

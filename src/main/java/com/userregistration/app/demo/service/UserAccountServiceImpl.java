@@ -1,6 +1,5 @@
 package com.userregistration.app.demo.service;
 
-import com.userregistration.app.demo.dto.UserAccountDto;
 import com.userregistration.app.demo.exceptions.UserAlreadyExistException;
 import com.userregistration.app.demo.mapper.UserAccountMapper;
 import com.userregistration.app.demo.model.UserAccount;
@@ -21,20 +20,19 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount add(UserAccountDto userAccountDto) {
+    public UserAccount add(UserAccount userAccount) {
         if (userAccountRepository.findAll().stream()
-                .map(userAccount -> userAccount.getUsername())
-                .filter(userName -> userName.equals(userAccountDto.getUsername()))
+                .filter(userName -> userName.equals(userAccount.getUsername()))
                 .collect(Collectors.toList()).size() > 0) {
             throw new UserAlreadyExistException("User account with username "
-                    + userAccountDto.getUsername() + " already exists!");
+                    + userAccount.getUsername() + " already exists!");
         }
-        return userAccountRepository.save(userAccountMapper.userAccountFromDto(userAccountDto));
+        return userAccountRepository.save(userAccount);
     }
 
     @Override
-    public UserAccountDto findByUsername(String username) {
-        return userAccountMapper.userAccountToDto(userAccountRepository.findByUsername(username));
+    public UserAccount findByUsername(String username) {
+        return userAccountRepository.findByUsername(username);
     }
 
     @Override
@@ -48,24 +46,24 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public void updateUserAccount(UserAccountDto userAccountDto, Long id) {
+    public void updateUserAccount(UserAccount userAccount, Long id) {
         UserAccount userAccountOld = userAccountRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("No such element"));
-        UserAccount userAccountNew = userAccountMapper.userAccountFromDto(userAccountDto);
-        userAccountOld.setUsername(userAccountNew.getUsername());
-        userAccountOld.setEnabled(userAccountNew.isEnabled());
-        userAccountOld.setPassword(userAccountNew.getPassword());
-        userAccountOld.setFirstName(userAccountNew.getFirstName());
-        userAccountOld.setLastName(userAccountNew.getLastName());
-        userAccountOld.setRole(userAccountNew.getRole());
+        userAccountOld.setId(id);
+        userAccountOld.setUsername(userAccount.getUsername());
+        userAccountOld.setEnabled(userAccount.isEnabled());
+        userAccountOld.setPassword(userAccount.getPassword());
+        userAccountOld.setFirstName(userAccount.getFirstName());
+        userAccountOld.setLastName(userAccount.getLastName());
+        userAccountOld.setRoles(userAccount.getRoles());
         userAccountRepository.flush();
     }
 
     @Override
-    public UserAccountDto findById(Long id) {
-        return userAccountMapper.userAccountToDto(userAccountRepository
+    public UserAccount findById(Long id) {
+        return userAccountRepository
                 .findById(id).orElseThrow(() ->
-                new RuntimeException("No such element")));
+                new RuntimeException("No such element"));
     }
 
 }

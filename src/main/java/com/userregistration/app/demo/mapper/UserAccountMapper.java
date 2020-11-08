@@ -1,12 +1,9 @@
 package com.userregistration.app.demo.mapper;
 
-import static com.userregistration.app.demo.model.Status.ACTIVE;
-import static com.userregistration.app.demo.model.Status.INACTIVE;
-
 import com.userregistration.app.demo.dto.UserAccountDto;
 import com.userregistration.app.demo.model.UserAccount;
-import com.userregistration.app.demo.repository.UserAccountRepository;
-import java.time.LocalDateTime;
+import com.userregistration.app.demo.repository.RoleRepository;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -15,7 +12,8 @@ import org.springframework.stereotype.Component;
 public class UserAccountMapper {
 
     @Autowired
-    private UserAccountRepository userAccountRepository;
+    private RoleRepository roleRepository;
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -25,12 +23,11 @@ public class UserAccountMapper {
         UserAccount userAccount = new UserAccount();
         userAccount.setLastName(userAccountDto.getLastName());
         userAccount.setFirstName(userAccountDto.getFirstName());
-        userAccount.setRole(userAccountDto.getRole());
+        userAccount.setRoles(Set.of(roleRepository.findById(userAccountDto.getRoleId()).orElseThrow()));
         userAccount.setPassword(encryptedPassword);
-        userAccount.setCreatedAt(LocalDateTime.now());
+        userAccount.setCreatedAt(userAccountDto.getCreatedAt());
         userAccount.setEnabled(mapStatusToEnabled(userAccountDto.getStatus()));
         userAccount.setUsername(userAccountDto.getUsername());
-        userAccountRepository.save(userAccount);
         return userAccount;
 
     }
@@ -41,7 +38,8 @@ public class UserAccountMapper {
         userAccountDto.setUsername(userAccount.getUsername());
         userAccountDto.setFirstName(userAccount.getFirstName());
         userAccountDto.setLastName(userAccount.getLastName());
-        userAccountDto.setRole(userAccount.getRole());
+        userAccountDto.setRoleId(userAccount.getRoles().stream()
+                            .map(role -> role.getId()).findFirst().orElseThrow());
         userAccountDto.setPassword(userAccount.getPassword());
         userAccountDto.setStatus(mapEnabledToStatus(userAccount.isEnabled()));
         userAccountDto.setCreatedAt(userAccount.getCreatedAt());
@@ -49,18 +47,18 @@ public class UserAccountMapper {
     }
 
     private boolean mapStatusToEnabled(String status) {
-        if (status == ACTIVE) {
-            return true;
-        } else {
+        if (status.equals("INACTIVE")) {
             return false;
+        } else {
+            return true;
         }
     }
 
     private String mapEnabledToStatus(boolean enabled) {
         if (enabled == true) {
-            return ACTIVE;
+            return "ACTIVE";
         } else {
-            return INACTIVE;
+            return "INACTIVE";
         }
 
     }

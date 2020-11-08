@@ -4,6 +4,7 @@ import com.userregistration.app.demo.dto.UserAccountDto;
 import com.userregistration.app.demo.mapper.UserAccountMapper;
 import com.userregistration.app.demo.model.UserAccount;
 import com.userregistration.app.demo.service.UserAccountService;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
@@ -11,11 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -41,22 +39,32 @@ public class MainController {
         return "userList";
     }
 
-    @GetMapping("/user/{id}/edit")
-    public String showUpdateForm(@PathVariable Long id, Model model) {
-        UserAccountDto user = userAccountService.findById(id);
-        model.addAttribute("user", user);
-        return "editUser";
+    @GetMapping("/user/{id}")
+    public String viewUserAccountDetails(Model model, @PathVariable Long id) {
+        UserAccountDto userAccountDto = userAccountMapper.userAccountToDto(userAccountService.findById(id));
+        model.addAttribute("userDetails", userAccountDto);
+        return "details";
+    }
+
+    @RequestMapping("/user/{id}/edit")
+    public ModelAndView showUpdateForm(@PathVariable Long id, Model model) {
+        ModelAndView mav = new ModelAndView("editUser");
+        UserAccountDto userAccountDto = userAccountMapper.userAccountToDto(userAccountService.findById(id));
+        model.addAttribute("userAccountEdit", userAccountDto);
+        return mav;
     }
 
     @PostMapping("/user/{id}/edit")
-    public String updateUserAccount(@PathVariable Long id, @Valid UserAccountDto user,
+    public String updateUserAccount(@PathVariable Long id,
+                                    @Valid @ModelAttribute("userAccountEdit") UserAccountDto userAccountDto,
                                     BindingResult result, Model model) {
         if (result.hasErrors()) {
-            user.setId(id);
+            userAccountDto.setId(id);
             return "editUser";
         }
-        UserAccount newUserAccount = userAccountService.add(user);
-        model.addAttribute("users", newUserAccount);
+        userAccountService.updateUserAccount(userAccountMapper
+                .userAccountFromDto(userAccountDto), id);
+        model.addAttribute("users", userAccountDto);
         return "redirect:/user";
     }
 
@@ -69,7 +77,7 @@ public class MainController {
     @GetMapping(value = "/user/new")
     public String viewUserAccountForm(Model model) {
         model.addAttribute("userAccountDto", new UserAccountDto());
-        return "userAccountDto";
+        return "userNew";
     }
 
     @PostMapping(value = "/user/new")
@@ -77,9 +85,11 @@ public class MainController {
                                   BindingResult result,
                                   final RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            return "userAccountDto";
+            return "userNew";
         }
-        UserAccount newUserAccount = userAccountService.add(userAccountDto);
+        userAccountDto.setCreatedAt(LocalDateTime.now());
+        UserAccount newUserAccount = userAccountService.add(userAccountMapper
+                .userAccountFromDto(userAccountDto));
         redirectAttributes.addFlashAttribute("flashUser", newUserAccount);
         return "redirect:/success";
     }
