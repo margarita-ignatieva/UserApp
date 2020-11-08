@@ -1,6 +1,5 @@
 package com.userregistration.app.demo.service;
 
-import com.userregistration.app.demo.dto.UserAccountDto;
 import com.userregistration.app.demo.model.UserAccount;
 import java.util.List;
 

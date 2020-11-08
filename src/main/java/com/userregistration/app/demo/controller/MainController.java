@@ -12,7 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -41,7 +45,8 @@ public class MainController {
 
     @GetMapping("/user/{id}")
     public String viewUserAccountDetails(Model model, @PathVariable Long id) {
-        UserAccountDto userAccountDto = userAccountMapper.userAccountToDto(userAccountService.findById(id));
+        UserAccountDto userAccountDto = userAccountMapper
+                .userAccountToDto(userAccountService.findById(id));
         model.addAttribute("userDetails", userAccountDto);
         return "details";
     }
@@ -49,14 +54,15 @@ public class MainController {
     @RequestMapping("/user/{id}/edit")
     public ModelAndView showUpdateForm(@PathVariable Long id, Model model) {
         ModelAndView mav = new ModelAndView("editUser");
-        UserAccountDto userAccountDto = userAccountMapper.userAccountToDto(userAccountService.findById(id));
+        UserAccountDto userAccountDto = userAccountMapper
+                .userAccountToDto(userAccountService.findById(id));
         model.addAttribute("userAccountEdit", userAccountDto);
         return mav;
     }
 
     @PostMapping("/user/{id}/edit")
-    public String updateUserAccount(@PathVariable Long id,
-                                    @Valid @ModelAttribute("userAccountEdit") UserAccountDto userAccountDto,
+    public String updateUserAccount(@PathVariable Long id, @Valid
+            @ModelAttribute("userAccountEdit") UserAccountDto userAccountDto,
                                     BindingResult result, Model model) {
         if (result.hasErrors()) {
             userAccountDto.setId(id);

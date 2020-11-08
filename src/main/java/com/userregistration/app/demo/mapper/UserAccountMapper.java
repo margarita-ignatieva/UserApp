@@ -14,7 +14,6 @@ public class UserAccountMapper {
     @Autowired
     private RoleRepository roleRepository;
 
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -23,7 +22,8 @@ public class UserAccountMapper {
         UserAccount userAccount = new UserAccount();
         userAccount.setLastName(userAccountDto.getLastName());
         userAccount.setFirstName(userAccountDto.getFirstName());
-        userAccount.setRoles(Set.of(roleRepository.findById(userAccountDto.getRoleId()).orElseThrow()));
+        userAccount.setRoles(Set.of(roleRepository.findById(userAccountDto.getRoleId())
+                .orElseThrow()));
         userAccount.setPassword(encryptedPassword);
         userAccount.setCreatedAt(userAccountDto.getCreatedAt());
         userAccount.setEnabled(mapStatusToEnabled(userAccountDto.getStatus()));

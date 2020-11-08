@@ -8,7 +8,6 @@ import com.userregistration.app.demo.repository.RoleRepository;
 import com.userregistration.app.demo.repository.UserAccountRepository;
 import java.time.LocalDateTime;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -41,12 +40,12 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         if (alreadySetUp) {
             return;
         }
-        Role role_admin = new Role();
-        role_admin.setName("ADMIN");
-        Role role_user = new Role();
-        role_user.setName("USER");
-        roleRepository.saveAndFlush(role_admin);
-        roleRepository.saveAndFlush(role_user);
+        Role roleAdmin = new Role();
+        roleAdmin.setName("ADMIN");
+        Role roleUser = new Role();
+        roleUser.setName("USER");
+        roleRepository.saveAndFlush(roleAdmin);
+        roleRepository.saveAndFlush(roleUser);
         UserAccount userAccount = new UserAccount();
         userAccount.setUsername("user");
         userAccount.setFirstName("chester");
@@ -54,7 +53,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         userAccount.setEnabled(true);
         userAccount.setPassword(passwordEncoder.encode("user"));
         userAccount.setCreatedAt(LocalDateTime.now());
-        userAccount.setRoles(Set.of(role_user));
+        userAccount.setRoles(Set.of(roleUser));
         userAccountRepository.save(userAccount);
         UserAccount userAccountAD = new UserAccount();
         userAccountAD.setUsername("adminn");
@@ -63,7 +62,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         userAccountAD.setEnabled(true);
         userAccountAD.setPassword(passwordEncoder.encode("user"));
         userAccountAD.setCreatedAt(LocalDateTime.now());
-        userAccountAD.setRoles(Set.of(role_admin));
+        userAccountAD.setRoles(Set.of(roleAdmin));
         userAccountRepository.save(userAccountAD);
         UserAccountDto userAccountDto = new UserAccountDto();
         userAccountDto.setStatus("ACTIVE");
@@ -72,7 +71,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         userAccountDto.setLastName("Test");
         userAccountDto.setPassword("test");
         userAccountDto.setCreatedAt(LocalDateTime.now());
-        userAccountDto.setRoleId(role_admin.getId());
+        userAccountDto.setRoleId(roleAdmin.getId());
         userAccountService.add(userAccountMapper.userAccountFromDto(userAccountDto));
         alreadySetUp = true;
 
