@@ -7,5 +7,5 @@ Admin and User. You can change default data source in application:properties fil
 You can load predefined user with DataLoader.
 ### Application is originally designed to change authorities on the run
 ### Further improvements
-Pagination and sort can be added. Design is poor, but you can improve it, if you wish)
+Pagination and sort can be added. Front end design is poor, but you can improve it, if you wish)
 
