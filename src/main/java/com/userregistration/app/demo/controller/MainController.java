@@ -51,6 +51,22 @@ public class MainController {
         return "details";
     }
 
+    @PostMapping("/user/{id}")
+    public String updateAccountStatus(@PathVariable Long id, @Valid
+            @ModelAttribute("userDetails") UserAccountDto userAccountDto,
+                                      BindingResult result, Model model) {
+        String rawPassword = userAccountService.findById(id).getPassword();
+        userAccountDto.setPassword(rawPassword);
+        if (result.hasErrors()) {
+            userAccountDto.setId(id);
+            return "details";
+        }
+        userAccountService.updateUserAccount(userAccountMapper
+                .userAccountFromDto(userAccountDto), id);
+        model.addAttribute("users", userAccountDto);
+        return "redirect:/user";
+    }
+
     @RequestMapping("/user/{id}/edit")
     public ModelAndView showUpdateForm(@PathVariable Long id, Model model) {
         ModelAndView mav = new ModelAndView("editUser");

@@ -1,6 +1,8 @@
 package com.userregistration.app.demo.service;
 
 import com.userregistration.app.demo.model.UserAccount;
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public interface UserAccountService {
@@ -15,4 +17,6 @@ public interface UserAccountService {
     void updateUserAccount(UserAccount userAccount, Long id);
 
     UserAccount findById(Long id);
+
+    Page<UserAccount> findPage(int pageNumber, int pageSize);
 }

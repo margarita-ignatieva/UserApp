@@ -1,5 +1,8 @@
 package com.userregistration.app.demo.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,12 +28,13 @@ public class UserAccount {
     private String username;
     private String firstName;
     private String lastName;
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_account_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @Fetch(FetchMode.JOIN)
     private Set<Role> roles = new HashSet<>();
     private LocalDateTime createdAt;
     private String password;

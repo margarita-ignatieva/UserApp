@@ -61,13 +61,13 @@
         <tr>
             <td>Role</td>
             <td>
-                <select th:field="*{roleId}">
-                    <option value="1">ADMIN</option>
-                    <option value="2">USER</option>
+                <select th:field="*{roleName}">
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="USER">USER</option>
                 </select>
             </td>
             <td>
-                <span th:if="${#fields.hasErrors('roleId')}" th:errors="*{roleId}">..</span>
+                <span th:if="${#fields.hasErrors('roleName')}" th:errors="*{roleName}">..</span>
             </td>
         </tr>
         <tr>

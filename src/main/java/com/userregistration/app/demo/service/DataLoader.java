@@ -71,8 +71,26 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         userAccountDto.setLastName("Test");
         userAccountDto.setPassword("test");
         userAccountDto.setCreatedAt(LocalDateTime.now());
-        userAccountDto.setRoleId(roleAdmin.getId());
+        userAccountDto.setRoleName(roleAdmin.getName());
         userAccountService.add(userAccountMapper.userAccountFromDto(userAccountDto));
+        UserAccountDto userAccountUS1 = new UserAccountDto();
+        userAccountUS1.setStatus("ACTIVE");
+        userAccountUS1.setUsername("mike");
+        userAccountUS1.setFirstName("Mike");
+        userAccountUS1.setLastName("Shinoda");
+        userAccountUS1.setPassword("test");
+        userAccountUS1.setCreatedAt(LocalDateTime.now());
+        userAccountUS1.setRoleName(roleUser.getName());
+        userAccountService.add(userAccountMapper.userAccountFromDto(userAccountUS1));
+        UserAccountDto userAccountAD2 = new UserAccountDto();
+        userAccountAD2.setStatus("INACTIVE");
+        userAccountAD2.setUsername("fenics");
+        userAccountAD2.setFirstName("Fenics");
+        userAccountAD2.setLastName("Guitar");
+        userAccountAD2.setPassword("guitar");
+        userAccountAD2.setCreatedAt(LocalDateTime.now());
+        userAccountAD2.setRoleName(roleAdmin.getName());
+        userAccountService.add(userAccountMapper.userAccountFromDto(userAccountAD2));
         alreadySetUp = true;
 
     }

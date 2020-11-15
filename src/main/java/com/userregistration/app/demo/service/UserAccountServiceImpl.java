@@ -5,7 +5,10 @@ import com.userregistration.app.demo.mapper.UserAccountMapper;
 import com.userregistration.app.demo.model.UserAccount;
 import com.userregistration.app.demo.repository.UserAccountRepository;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,9 +24,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount add(UserAccount userAccount) {
-        if (userAccountRepository.findAll().stream()
-                .filter(userName -> userName.equals(userAccount.getUsername()))
-                .collect(Collectors.toList()).size() > 0) {
+        if (userAccountRepository.findByUsername(userAccount.getUsername()) != null) {
             throw new UserAlreadyExistException("User account with username "
                     + userAccount.getUsername() + " already exists!");
         }
@@ -64,6 +65,12 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userAccountRepository
                 .findById(id).orElseThrow(() ->
                 new RuntimeException("No such element"));
+    }
+
+    @Override
+    public Page<UserAccount> findPage(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+        return null;
     }
 
 }

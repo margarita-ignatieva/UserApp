@@ -22,8 +22,7 @@ public class UserAccountMapper {
         UserAccount userAccount = new UserAccount();
         userAccount.setLastName(userAccountDto.getLastName());
         userAccount.setFirstName(userAccountDto.getFirstName());
-        userAccount.setRoles(Set.of(roleRepository.findById(userAccountDto.getRoleId())
-                .orElseThrow()));
+        userAccount.setRoles(Set.of(roleRepository.findByRoleName(userAccountDto.getRoleName())));
         userAccount.setPassword(encryptedPassword);
         userAccount.setCreatedAt(userAccountDto.getCreatedAt());
         userAccount.setEnabled(mapStatusToEnabled(userAccountDto.getStatus()));
@@ -38,8 +37,8 @@ public class UserAccountMapper {
         userAccountDto.setUsername(userAccount.getUsername());
         userAccountDto.setFirstName(userAccount.getFirstName());
         userAccountDto.setLastName(userAccount.getLastName());
-        userAccountDto.setRoleId(userAccount.getRoles().stream()
-                            .map(role -> role.getId()).findFirst().orElseThrow());
+        userAccountDto.setRoleName(userAccount.getRoles().stream()
+                            .map(role -> role.getName()).findFirst().orElseThrow());
         userAccountDto.setPassword(userAccount.getPassword());
         userAccountDto.setStatus(mapEnabledToStatus(userAccount.isEnabled()));
         userAccountDto.setCreatedAt(userAccount.getCreatedAt());
