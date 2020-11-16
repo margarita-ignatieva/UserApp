@@ -17,6 +17,4 @@ public interface UserAccountService {
     void updateUserAccount(UserAccount userAccount, Long id);
 
     UserAccount findById(Long id);
-
-    Page<UserAccount> findPage(int pageNumber, int pageSize);
 }

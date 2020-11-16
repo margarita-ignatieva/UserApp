@@ -21,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class MainController {
+public class UserAccountController {
 
     @Autowired
     private UserAccountService userAccountService;

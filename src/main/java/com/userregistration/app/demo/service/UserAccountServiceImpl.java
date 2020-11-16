@@ -66,11 +66,4 @@ public class UserAccountServiceImpl implements UserAccountService {
                 .findById(id).orElseThrow(() ->
                 new RuntimeException("No such element"));
     }
-
-    @Override
-    public Page<UserAccount> findPage(int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
-        return null;
-    }
-
 }
